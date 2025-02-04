@@ -10,7 +10,8 @@ library(lavaan)
 library(semPlot)
 
 # Set up folder path to save data files
-filepath <- "C:/myfiles"
+#filepath <- "C:/myfiles"
+filepath <- "H:/My Drive/Papers/O\'Rourke - CIE LCS/Files for GitHub"
 
 ###############################################
 # Simulate data with constrained coupling paths
@@ -606,14 +607,15 @@ if (!dir.exists(free_path)) {
 
 write.table(mgfree, file=paste0(free_path, "/", "CIELCS_free.dat"), row.names=FALSE, col.names = FALSE, sep="\t", quote=FALSE)
 
+# Rename variables for lavaan analysis 
+names(mgfree) <- c("z", "x", "m2", "m3", "m4", "m5", "m6", "y2", "y3", "y4", "y5", "y6")
+
 #############################################################
 # Analyze data with constrained coupling paths - Cov approach
 #############################################################
 
 # create interaction term 
 mgwrite$xz <- mgwrite$x * mgwrite$z
-
-# Add Wald test, bootstrapping of indirect effects
 
 #Model Specification - X Z M Y with interaction
 cie_lcs_constr <- ' 
@@ -828,48 +830,47 @@ cie_lcs_constr <- '
    sm ~~ sy
    lm2 ~~ sy
    ly2 ~~ sm
+   
+   #Define mediated effects
+   ab0 := (a_x*b)+(a_xz*b*0)
+   ab1 := (a_x*b)+(a_xz*b*1)
     
 ' #closing quote
 
 fit_cie_lcs <- lavaan(cie_lcs_constr,
-                  data = mgwrite,
-                  meanstructure = TRUE,
-                  estimator = "ML",
-                  missing = "fiml",
-                  fixed.x = FALSE,
-                  mimic="mplus",
-                  control=list(iter.max=500),
-                  verbose=FALSE)
+                      data = mgwrite,
+                      meanstructure = TRUE,
+                      estimator = "ML",
+                      missing = "fiml",
+                      fixed.x = FALSE,
+                      se = "boot", bootstrap = 500,
+                      mimic="mplus",
+                      control=list(iter.max=500),
+                      verbose=FALSE)
 
 summary(fit_cie_lcs, fit.measures=TRUE)
 
+# Wald test of equality for ab when Z = 0 vs. 1
+lavTestWald(fit_cie_lcs, constraints = "ab0 == ab1")
+
+# See bootstrapped CIs for conditional indirect effects
+parameterEstimates(fit_cie_lcs, remove.nonfree=TRUE)
+
+# See technical output (comparable to Mplus tech1)
 lavInspect(fit_cie_lcs)
+
+# See fit indices
 fitMeasures(fit_cie_lcs)
 
+##################################################################
+# Analyze data with freely estimated coupling paths - Cov approach
+#################################################################
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# create interaction term 
+mgfree$xz <- mgfree$x * mgfree$z
 
 #Model Specification - X Z M Y with interaction
-cie_lcs_constr <- ' 
+cie_lcs_free <- ' 
 
 #Y
 
@@ -1039,33 +1040,33 @@ cie_lcs_constr <- '
    sm ~ start(0)*a_z * z
    
  #XZ on slope M (a_xz) interaction
-  # sm ~ start(0.8)*a_xz * xz 
+   sm ~ start(0.8)*a_xz * xz 
     
  #X Z & interaction on M & Y intercept
     ly2 ~ x
     lm2 ~ x
     ly2 ~ z
     lm2 ~ z
-    #lm2 ~ xz
-    #ly2 ~ xz
+    lm2 ~ xz
+    ly2 ~ xz
     
  #x & z intercept & variance 
  #differs from Mplus - all ints, vars, covars must be included in code
  x ~ 1
  z ~ 1
-# xz ~ 0
+ xz ~ 0
  x ~~ x
  z ~~ z
  x ~~ z
-# xz ~~ xz
- #x ~~ xz
- #z ~~ xz
+ xz ~~ xz
+ x ~~ xz
+ z ~~ xz
    
-  #coupling from M to Y (b) (constrained equal)
-    dy3 ~ start(-.05)*b * lm2
-    dy4 ~ start(-.05)*b * lm3
-    dy5 ~ start(-.05)*b * lm4
-    dy6 ~ start(-.05)*b * lm5
+  #coupling from M to Y (b) (freely estimated)
+    dy3 ~ start(-.23)*b3 * lm2
+    dy4 ~ start(-.18)*b4 * lm3
+    dy5 ~ start(-.13)*b5 * lm4
+    dy6 ~ start(-.08)*b6 * lm5
     
   #correlated residuals
     y2 ~~ cor*m2
@@ -1081,20 +1082,46 @@ cie_lcs_constr <- '
    sm ~~ sy
    lm2 ~~ sy
    ly2 ~~ sm
+   
+   #Define mediated effects
+   ab0_3 := (a_x*b3)+(a_xz*b3*0)
+   ab0_4 := (a_x*b4)+(a_xz*b4*0)
+   ab0_5 := (a_x*b5)+(a_xz*b5*0)
+   ab0_6 := (a_x*b6)+(a_xz*b6*0)
+   ab1_3 := (a_x*b3)+(a_xz*b3*1)
+   ab1_4 := (a_x*b4)+(a_xz*b4*1)
+   ab1_5 := (a_x*b5)+(a_xz*b5*1)
+   ab1_6 := (a_x*b6)+(a_xz*b6*1)
     
 ' #closing quote
 
-fit_cie_lcs <- lavaan(cie_lcs_constr,
-                      data = mgwrite,
+free_cie_lcs <- lavaan(cie_lcs_free,
+                      data = mgfree,
                       meanstructure = TRUE,
                       estimator = "ML",
                       missing = "fiml",
                       fixed.x = FALSE,
+                      se = "boot", bootstrap = 1000,
                       mimic="mplus",
                       control=list(iter.max=500),
                       verbose=FALSE)
 
-summary(fit_cie_lcs, fit.measures=TRUE)
+summary(free_cie_lcs, fit.measures=TRUE)
 
-lavInspect(fit_cie_lcs)
-fitMeasures(fit_cie_lcs)
+# Wald test of equality for ab when Z = 0 vs. 1
+con = '
+   ab0_3 == ab1_3
+   ab0_4 == ab1_4
+   ab0_5 == ab1_5
+   ab0_6 == ab1_6
+'
+lavTestWald(free_cie_lcs, constraints = con)
+
+# See bootstrapped CIs for conditional indirect effects
+parameterEstimates(free_cie_lcs, remove.nonfree=TRUE)
+
+# See technical output (comparable to Mplus tech1)
+lavInspect(free_cie_lcs)
+
+# See fit indices
+fitMeasures(free_cie_lcs)
