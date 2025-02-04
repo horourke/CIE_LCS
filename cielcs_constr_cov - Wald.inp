@@ -11,7 +11,6 @@
   ANALYSIS:
      ITERATIONS = 10000;
      COVERAGE = 0;
-     !BOOTSTRAP = 5000;
   MODEL:
   !for the longitudinal variable Y
   !Latent variable nodes

@@ -11,7 +11,7 @@ DEFINE:	xz = x1*z;
 ANALYSIS:
    ITERATIONS = 10000;
    COVERAGE = 0;
-   BOOTSTRAP = 5000;
+   BOOTSTRAP = 1000;
 MODEL:
 !for the longitudinal variable Y
 !Latent variable nodes
@@ -108,14 +108,14 @@ MODEL:
 !X on slope Y (c');
   sy on x1 (cp);
 
-  !X on slope M (a);
-  sm on x1 (a1);
+  !X on slope M (a_x);
+  sm on x1 (a_x);
 
-  !Z on M diff scores (za);
-  sm on z (a2);
+  !Z on M diff scores (a_z);
+  sm on z (a_z);
 
-  !Interaction (int);
-  sm on xz (int);
+  !Interaction (a_xz);
+  sm on xz (a_xz);
 
   !coupling from m to y (b);
   dy3 on lm2*-.23 (b3);
@@ -158,14 +158,14 @@ MODEL:
   !Indirect effect ab;
   Model Constraint:
     new(ab0_3 ab0_4 ab0_5 ab0_6 ab1_3 ab1_4 ab1_5 ab1_6);
-  ab0_3 = (a1*b3)+(int*b3*0);
-  ab0_4 = (a1*b4)+(int*b4*0);
-  ab0_5 = (a1*b5)+(int*b5*0);
-  ab0_6 = (a1*b6)+(int*b6*0);
-  ab1_3 = (a1*b3)+(int*b3*1);
-  ab1_4 = (a1*b4)+(int*b4*1);
-  ab1_5 = (a1*b5)+(int*b5*1);
-  ab1_6 = (a1*b6)+(int*b6*1);
+    ab0_3 = (a_x*b3)+(a_xz*b3*0);
+    ab0_4 = (a_x*b4)+(a_xz*b4*0);
+    ab0_5 = (a_x*b5)+(a_xz*b5*0);
+    ab0_6 = (a_x*b6)+(a_xz*b6*0);
+    ab1_3 = (a_x*b3)+(a_xz*b3*1);
+    ab1_4 = (a_x*b4)+(a_xz*b4*1);
+    ab1_5 = (a_x*b5)+(a_xz*b5*1);
+    ab1_6 = (a_x*b6)+(a_xz*b6*1);
   PLOT:	TYPE = PLOT2;
 
 OUTPUT:  TECH1 TECH4;
