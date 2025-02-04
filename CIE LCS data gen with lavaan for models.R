@@ -10,8 +10,7 @@ library(lavaan)
 library(semPlot)
 
 # Set up folder path to save data files
-#filepath <- "C:/myfiles"
-filepath <- "H:/My Drive/Papers/O\'Rourke - CIE LCS/Files for GitHub"
+filepath <- "C:/myfiles"
 
 ###############################################
 # Simulate data with constrained coupling paths
