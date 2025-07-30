@@ -1,0 +1,157 @@
+!***********************************************!
+!         O'Rourke & Hilley - CIE LCS           !
+!***********************************************!
+
+  TITLE: O'Rourke & Hilley 2025 - constrained, Power Step 1;
+  DATA:	FILE IS CIELCS_constr.dat;
+  VARIABLE:	NAMES ARE z x1 m2-m6 y2-y6;
+     USEVARIABLE ARE z x1 m2-m6 y2-y6 xz;
+  DEFINE:	xz = x1*z;
+  ANALYSIS:
+     ITERATIONS = 10000;
+     !COVERAGE = 0;
+    MODEL:
+  !for the longitudinal variable Y
+  !Latent variable nodes
+    ly2 by y2 @1;
+    ly3 by y3 @1;
+    ly4 by y4 @1;
+    ly5 by y5 @1;
+    ly6 by y6 @1;
+
+  !Autoregressive part
+    ly3 on ly2 @1;
+    ly4 on ly3 @1;
+    ly5 on ly4 @1;
+    ly6 on ly5 @1;
+
+  !Difference score on latent level (LCS scores)
+    dy3 by ly3 @1;
+    dy4 by ly4 @1;
+    dy5 by ly5 @1;
+    dy6 by ly6 @1;
+
+  !Proportional change
+    dy3 on ly2 * (pcy);
+    dy4 on ly3 * (pcy);
+    dy5 on ly4 * (pcy);
+    dy6 on ly5 * (pcy);
+
+  !Initial level
+    y0 by ly2 @1;
+
+  !Additive component
+    ya by dy3 @1;
+    ya by dy4 @1;
+    ya by dy5 @1;
+    ya by dy6 @1;
+
+  ! Set the means and variance of observed, latent, and LCSs to be 0
+    [y2@0]; [ly2@0];  ly2@0;
+    [y3@0]; [ly3@0]; [dy3@0]; ly3@0; dy3@0;
+    [y4@0]; [ly4@0]; [dy4@0]; ly4@0; dy4@0;
+    [y5@0]; [ly5@0]; [dy5@0]; ly5@0; dy5@0;
+    [y6@0]; [ly6@0]; [dy6@0]; ly6@0; dy6@0;
+
+  !Initial level & additive component means & variances
+    [y0* ya*];
+    y0 ya;
+
+  !for the longitudinal variable M
+  !Latent variable nodes
+    lm2 by m2 @1;
+    lm3 by m3 @1;
+    lm4 by m4 @1;
+    lm5 by m5 @1;
+    lm6 by m6 @1;
+
+  !Autoregressive part
+    lm3 on lm2 @1;
+    lm4 on lm3 @1;
+    lm5 on lm4 @1;
+    lm6 on lm5 @1;
+
+  !Difference score on latent level (LCS scores)
+    dm3 by lm3 @1;
+    dm4 by lm4 @1;
+    dm5 by lm5 @1;
+    dm6 by lm6 @1;
+
+  !Proportional change
+    dm3 on lm2 * (pcm);
+    dm4 on lm3 * (pcm);
+    dm5 on lm4 * (pcm);
+    dm6 on lm5 * (pcm);
+
+  !Initial level
+    m0 by lm2 @1;
+
+  !Additive component
+    ma by dm3 @1;
+    ma by dm4 @1;
+    ma by dm5 @1;
+    ma by dm6 @1;
+
+  ! Set the means and variance of observed, latent, and LCSs to be 0
+    [m2@0]; [lm2@0];  lm2@0;
+    [m3@0]; [lm3@0]; [dm3@0]; lm3@0; dm3@0;
+    [m4@0]; [lm4@0]; [dm4@0]; lm4@0; dm4@0;
+    [m5@0]; [lm5@0]; [dm5@0]; lm5@0; dm5@0;
+    [m6@0]; [lm6@0]; [dm6@0]; lm6@0; dm6@0;
+
+  !Initial level & additive component means & variances
+    [m0* ma*];
+    m0 ma;
+
+    !X on additive component for Y (c')
+    ya on x1 (cp);
+
+    !X on additive component for M (a_x);
+    ma on x1 (a_x);
+
+    !Z on additive component for M (a_z);
+    ma on z (a_z);
+
+    !Interaction (a_xz);
+    ma on xz (a_xz);
+
+    !coupling from m to y (b);
+    dy3 on lm2* (b);
+    dy4 on lm3* (b);
+    dy5 on lm4* (b);
+    dy6 on lm5* (b);
+
+    !Set all residuals to be equal
+    y2*1 (5); m2*1 (6);
+    y3*1 (5); m3*1 (6);
+    y4*1 (5); m4*1 (6);
+    y5*1 (5); m5*1 (6);
+    y6*1 (5); m6*1 (6);
+
+    ! Set the correlated residuals
+    y2 with m2* (7);
+    y3 with m3* (7);
+    y4 with m4* (7);
+    y5 with m5* (7);
+    y6 with m6* (7);
+
+    !X & Z on M & Y intercept;
+    y0 ON x1;
+    m0 ON x1;
+    y0 ON z;
+    m0 ON z;
+
+    ! Interaction on M & Y intercept;
+    y0 on xz;
+    m0 on xz;
+
+    !Parameter covs;
+    y0 WITH ya;
+    m0 WITH ma;
+    m0 WITH y0;
+    ma WITH ya;
+    m0 WITH ya;
+    y0 WITH ma;
+
+  OUTPUT:  TECH1 TECH9;
+  SAVEDATA:	ESTIMATES = constr_ests.dat;
