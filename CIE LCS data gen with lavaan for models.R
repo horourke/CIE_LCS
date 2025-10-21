@@ -26,10 +26,10 @@ seed_0 <- 011287
 #Set sample size for data matrix;
 n_0 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_0 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_0 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -69,13 +69,13 @@ dm <- numeric(5)
 
 #Define parameters
 mu_y0 <- 7
-mu_ys <- -.5
+mu_ya <- -.5
 alpha_y <- 1
 beta_y <- .1
 sig2_ye <- .101
 sigma_ye <- sqrt(sig2_ye)
 mu_m0 <- 6
-mu_ms <- 0.9
+mu_ma <- 0.9
 alpha_m <- 1
 beta_m <- -.05
 sig2_me <- .025
@@ -94,24 +94,24 @@ set.seed(seed_0)
 for (i in 1:n_0) {
   x <- x_mu + sqrt(x_var) * rnorm(1)
   y0 <- mu_y0 + dat2_0[i, "y0_0"]
-  ys <- mu_ys + dat2_0[i, "y1_0"]
+  ya <- mu_ya + dat2_0[i, "y1_0"]
   ye[1] <- sigma_ye * rnorm(1)
   yl[1] <- y0
   ym[1] <- yl[1] + ye[1]
   
   m0 <- mu_m0 + dat2_0[i, "m0_0"]
-  ms <- mu_ms + dat2_0[i, "m1_0"]
+  ma <- mu_ma + dat2_0[i, "m1_0"]
   me[1] <- sigma_me * rnorm(1)
   ml[1] <- m0
   mm[1] <- ml[1] + me[1]
   
   for (t in 2:5) {
-    dy[t] <- alpha_y * ys + beta_y * yl[t-1] + gamma_ym * ml[t-1] + b_cp * x
+    dy[t] <- alpha_y * ya + beta_y * yl[t-1] + gamma_ym * ml[t-1] + b_cp * x
     ye[t] <- sigma_ye * rnorm(1)
     yl[t] <- yl[t-1] + dy[t]
     ym[t] <- yl[t] + ye[t]
     
-    dm[t] <- alpha_m * ms + beta_m * ml[t-1] + b_a * x
+    dm[t] <- alpha_m * ma + beta_m * ml[t-1] + b_a * x
     me[t] <- sigma_me * rnorm(1)
     ml[t] <- ml[t-1] + dm[t]
     mm[t] <- ml[t] + me[t]
@@ -158,10 +158,10 @@ seed_1 <- 012992
 #Set sample size for data matrix;
 n_1 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_1 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_1 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -202,13 +202,13 @@ dm <- numeric(5)
 #Define parameters
 #All M and Y parameters are the same, only 'a' path differs in sign (not magnitude); XM interaction
 mu_y0 <- 7
-mu_ys <- -.5
+mu_ya <- -.5
 alpha_y <- 1
 beta_y <- .1
 sig2_ye <- .101
 sigma_ye <- sqrt(sig2_ye)
 mu_m0 <- 6
-mu_ms <- 0.9
+mu_ma <- 0.9
 alpha_m <- 1
 beta_m <- -.05
 sig2_me <- .025
@@ -227,24 +227,24 @@ set.seed(seed_1)
 for (i in 1:n_1) {
   x <- x_mu + sqrt(x_var) * rnorm(1)
   y0 <- mu_y0 + dat2_1[i, "y0_0"]
-  ys <- mu_ys + dat2_1[i, "y1_0"]
+  ya <- mu_ya + dat2_1[i, "y1_0"]
   ye[1] <- sigma_ye * rnorm(1)
   yl[1] <- y0
   ym[1] <- yl[1] + ye[1]
   
   m0 <- mu_m0 + dat2_1[i, "m0_0"]
-  ms <- mu_ms + dat2_1[i, "m1_0"]
+  ma <- mu_ma + dat2_1[i, "m1_0"]
   me[1] <- sigma_me * rnorm(1)
   ml[1] <- m0
   mm[1] <- ml[1] + me[1]
   
   for (t in 2:5) {
-    dy[t] <- alpha_y * ys + beta_y * yl[t-1] + gamma_ym * ml[t-1] + b_cp * x
+    dy[t] <- alpha_y * ya + beta_y * yl[t-1] + gamma_ym * ml[t-1] + b_cp * x
     ye[t] <- sigma_ye * rnorm(1)
     yl[t] <- yl[t-1] + dy[t]
     ym[t] <- yl[t] + ye[t]
     
-    dm[t] <- alpha_m * ms + beta_m * ml[t-1] + b_a * x
+    dm[t] <- alpha_m * ma + beta_m * ml[t-1] + b_a * x
     me[t] <- sigma_me * rnorm(1)
     ml[t] <- ml[t-1] + dm[t]
     mm[t] <- ml[t] + me[t]
@@ -327,10 +327,10 @@ seed_0 <- 011223
 #Set sample size for data matrix;
 n_0 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_0 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_0 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -359,13 +359,13 @@ colnames(dat2_0)[5:15] <- c("x", paste0("m", 1:5), paste0("y", 1:5))
 #Define parameters
 #All M and Y parameters are the same, only 'a' path differs in sign (not magnitude); XM interaction
 mu_y0 <- 7
-mu_ys <- -.5
+mu_ya <- -.5
 alpha_y <- 1
 beta_y <- .1
 sig2_ye <- .101
 sigma_ye <- sqrt(sig2_ye)
 mu_m0 <- 6
-mu_ms <- 0.9
+mu_ma <- 0.9
 alpha_m <- 1
 beta_m <- -.05
 sig2_me <- .025
@@ -395,24 +395,24 @@ set.seed(seed_0)
 for (i in 1:n_0) {
   x <- x_mu + sqrt(x_var) * rnorm(1)
   y0 <- mu_y0 + dat2_0[i, "y0_0"]
-  ys <- mu_ys + dat2_0[i, "y1_0"]
+  ya <- mu_ya + dat2_0[i, "y1_0"]
   ye[1] <- sigma_ye * rnorm(1)
   yl[1] <- y0
   ym[1] <- yl[1] + ye[1]
   
   m0 <- mu_m0 + dat2_0[i, "m0_0"]
-  ms <- mu_ms + dat2_0[i, "m1_0"]
+  ma <- mu_ma + dat2_0[i, "m1_0"]
   me[1] <- sigma_me * rnorm(1)
   ml[1] <- m0
   mm[1] <- ml[1] + me[1]
   
   for (t in 2:5) {
     g <- t - 1
-    dy[t] <- alpha_y * ys + beta_y * yl[t-1] + gamma_ym[g] * ml[t-1] + b_cp * x
+    dy[t] <- alpha_y * ya + beta_y * yl[t-1] + gamma_ym[g] * ml[t-1] + b_cp * x
     ye[t] <- sigma_ye * rnorm(1)
     yl[t] <- yl[t-1] + dy[t]
     ym[t] <- yl[t] + ye[t]
-    dm[t] <- alpha_m * ms + beta_m * ml[t-1] + b_a * x
+    dm[t] <- alpha_m * ma + beta_m * ml[t-1] + b_a * x
     me[t] <- sigma_me * rnorm(1)
     ml[t] <- ml[t-1] + dm[t]
     mm[t] <- ml[t] + me[t]
@@ -458,10 +458,10 @@ seed_1 <- 012923
 #Set sample size for data matrix;
 n_1 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_1 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_1 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -490,13 +490,13 @@ colnames(dat2_1)[5:15] <- c("x", paste0("m", 1:5), paste0("y", 1:5))
 #Define parameters
 #All M and Y parameters are the same, only 'a' path differs in sign (not magnitude); XM interaction
 mu_y0 <- 7
-mu_ys <- -.5
+mu_ya <- -.5
 alpha_y <- 1
 beta_y <- .1
 sig2_ye <- .101
 sigma_ye <- sqrt(sig2_ye)
 mu_m0 <- 6
-mu_ms <- 0.9
+mu_ma <- 0.9
 alpha_m <- 1
 beta_m <- -.05
 sig2_me <- .025
@@ -526,24 +526,24 @@ set.seed(seed_1)
 for (i in 1:n_1) {
   x <- x_mu + sqrt(x_var) * rnorm(1)
   y0 <- mu_y0 + dat2_1[i, "y0_0"]
-  ys <- mu_ys + dat2_1[i, "y1_0"]
+  ya <- mu_ya + dat2_1[i, "y1_0"]
   ye[1] <- sigma_ye * rnorm(1)
   yl[1] <- y0
   ym[1] <- yl[1] + ye[1]
   
   m0 <- mu_m0 + dat2_1[i, "m0_0"]
-  ms <- mu_ms + dat2_1[i, "m1_0"]
+  ma <- mu_ma + dat2_1[i, "m1_0"]
   me[1] <- sigma_me * rnorm(1)
   ml[1] <- m0
   mm[1] <- ml[1] + me[1]
   
   for (t in 2:5) {
       g <- t - 1
-      dy[t] <- alpha_y * ys + beta_y * yl[t-1] + gamma_ym[g] * ml[t-1] + b_cp * x
+      dy[t] <- alpha_y * ya + beta_y * yl[t-1] + gamma_ym[g] * ml[t-1] + b_cp * x
       ye[t] <- sigma_ye * rnorm(1)
       yl[t] <- yl[t-1] + dy[t]
       ym[t] <- yl[t] + ye[t]
-      dm[t] <- alpha_m * ms + beta_m * ml[t-1] + b_a * x
+      dm[t] <- alpha_m * ma + beta_m * ml[t-1] + b_a * x
       me[t] <- sigma_me * rnorm(1)
       ml[t] <- ml[t-1] + dm[t]
       mm[t] <- ml[t] + me[t]
@@ -646,8 +646,8 @@ cie_lcs_constr <- '
     dy5 ~ start(.1)*pcy * ly4
     dy6 ~ start(.1)*pcy * ly5
 
-  #slope (constant change factor) (loadings = 1)
-    sy =~ 1*dy3 + 
+  #additive change component (loadings = 1)
+    ya =~ 1*dy3 + 
           1*dy4 + 
           1*dy5 + 
           1*dy6    
@@ -692,11 +692,11 @@ cie_lcs_constr <- '
     dy5 ~~ 0*dy5
     dy6 ~~ 0*dy6
 
-  #slope mean
-    sy ~ start(-.2)*1
+  #additive component mean
+    ya ~ start(-.2)*1
 
- #slope variance
-    sy ~~ sy
+ #additive component variance
+    ya ~~ ya
    
 #M
 
@@ -725,8 +725,8 @@ cie_lcs_constr <- '
     dm5 ~ start(-.05)*pcm * lm4
     dm6 ~ start(-.05)*pcm * lm5
 
-  #slope (constant change factor) (loadings = 1)
-    sm =~ 1*dm3 + 
+  #additive change component (loadings = 1)
+    ma =~ 1*dm3 + 
           1*dm4 + 
           1*dm5 + 
           1*dm6    
@@ -771,23 +771,23 @@ cie_lcs_constr <- '
     dm5 ~~ 0*dm5
     dm6 ~~ 0*dm6
 
-  #slope mean
-    sm ~ start(.9)*1
+  #additive component mean
+    ma ~ start(.9)*1
 
- #slope variance
-    sm ~~ sm
+ #additive component variance
+    ma ~~ ma
     
- #X on slope Y (c prime)
-    sy ~ start(.11)*cp * x
+ #X on additive component Y (c prime)
+    ya ~ start(.11)*cp * x
     
- #X on slope M (a_x)
-    sm ~ start(.04)*a_x * x
+ #X on additive component M (a_x)
+    ma ~ start(.04)*a_x * x
     
- #Z on slope M (a_z)
-   sm ~ start(0)*a_z * z
+ #Z on additive component M (a_z)
+   ma ~ start(0)*a_z * z
    
- #XZ on slope M (a_xz) interaction
-   sm ~ start(0.8)*a_xz * xz 
+ #XZ on additive component M (a_xz) interaction
+   ma ~ start(0.8)*a_xz * xz 
     
  #X Z & interaction on M & Y intercept
     ly2 ~ x
@@ -823,12 +823,12 @@ cie_lcs_constr <- '
     y6 ~~ cor*m6
     
   #parameter covs
-   sm ~~ lm2
-   sy ~~ ly2
+   ma ~~ lm2
+   ya ~~ ly2
    lm2 ~~ ly2
-   sm ~~ sy
-   lm2 ~~ sy
-   ly2 ~~ sm
+   ma ~~ ya
+   lm2 ~~ ya
+   ly2 ~~ ma
    
    #Define mediated effects
    ab0 := (a_x*b)+(a_xz*b*0)
@@ -898,8 +898,8 @@ cie_lcs_free <- '
     dy5 ~ start(.1)*pcy * ly4
     dy6 ~ start(.1)*pcy * ly5
 
-  #slope (constant change factor) (loadings = 1)
-    sy =~ 1*dy3 + 
+  #additive change component (loadings = 1)
+    ya =~ 1*dy3 + 
           1*dy4 + 
           1*dy5 + 
           1*dy6    
@@ -944,11 +944,11 @@ cie_lcs_free <- '
     dy5 ~~ 0*dy5
     dy6 ~~ 0*dy6
 
-  #slope mean
-    sy ~ start(-.2)*1
+  #additive component mean
+    ya ~ start(-.2)*1
 
- #slope variance
-    sy ~~ sy
+ #additive component variance
+    ya ~~ ya
    
 #M
 
@@ -977,8 +977,8 @@ cie_lcs_free <- '
     dm5 ~ start(-.05)*pcm * lm4
     dm6 ~ start(-.05)*pcm * lm5
 
-  #slope (constant change factor) (loadings = 1)
-    sm =~ 1*dm3 + 
+  #additive change component (loadings = 1)
+    ma =~ 1*dm3 + 
           1*dm4 + 
           1*dm5 + 
           1*dm6    
@@ -1023,23 +1023,24 @@ cie_lcs_free <- '
     dm5 ~~ 0*dm5
     dm6 ~~ 0*dm6
 
-  #slope mean
-    sm ~ start(.9)*1
+  #additive component mean
+    ma ~ start(.9)*1
 
- #slope variance
-    sm ~~ sm
+ #additive component variance
+    ma ~~ ma
+
     
- #X on slope Y (c prime)
-    sy ~ start(.11)*cp * x
+  #X on additive component Y (c prime)
+    ya ~ start(.11)*cp * x
     
- #X on slope M (a_x)
-    sm ~ start(.04)*a_x * x
+ #X on additive component M (a_x)
+    ma ~ start(.04)*a_x * x
     
- #Z on slope M (a_z)
-   sm ~ start(0)*a_z * z
+ #Z on additive component M (a_z)
+    ma ~ start(0)*a_z * z
    
- #XZ on slope M (a_xz) interaction
-   sm ~ start(0.8)*a_xz * xz 
+ #XZ on additive component M (a_xz) interaction
+    ma ~ start(0.8)*a_xz * xz 
     
  #X Z & interaction on M & Y intercept
     ly2 ~ x
@@ -1075,12 +1076,12 @@ cie_lcs_free <- '
     y6 ~~ cor*m6
     
   #parameter covs
-   sm ~~ lm2
-   sy ~~ ly2
+   ma ~~ lm2
+   ya ~~ ly2
    lm2 ~~ ly2
-   sm ~~ sy
-   lm2 ~~ sy
-   ly2 ~~ sm
+   ma ~~ ya
+   lm2 ~~ ya
+   ly2 ~~ ma
    
    #Define mediated effects
    ab0_3 := (a_x*b3)+(a_xz*b3*0)
