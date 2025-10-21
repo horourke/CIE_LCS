@@ -24,10 +24,10 @@ seed_0 <- 011287
 #Set sample size for data matrix;
 n_0 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_0 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_0 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -156,10 +156,10 @@ seed_1 <- 012992
 #Set sample size for data matrix;
 n_1 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_1 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_1 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -322,10 +322,10 @@ seed_0 <- 011223
 #Set sample size for data matrix;
 n_0 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_0 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_0 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -453,10 +453,10 @@ seed_1 <- 012923
 #Set sample size for data matrix;
 n_1 <- 260
 
-#Define correlation matrix among intercepts and slopes;
+#Define correlation matrix among initial levels and additive components;
 r_1 <- matrix(c(1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1, .5, .5, .5, .5, 1),4,4)
 
-#Define vector of standard deviations of intercepts and slopes;
+#Define vector of standard deviations of initial levels and additive components;
 ds_1 <- diag(c(.7, .1, .6, .2))
 
 #Compute covariance matrix
@@ -600,6 +600,7 @@ if (!dir.exists(free_path)) {
 #z x m1-m5 y1-y5
 
 write.table(mgfree, file=paste0(free_path, "/", "CIELCS_free.dat"), row.names=FALSE, col.names = FALSE, sep="\t", quote=FALSE)
+
 
 
 
