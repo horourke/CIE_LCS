@@ -2,8 +2,8 @@
 !         O'Rourke & Hilley - CIE LCS           !
 !***********************************************!
 
-TITLE: O'Rourke & Hilley CIE LCS - freely estimated coupling, time-invariant covariate approach;
-!Params = constrained, approach = MG;
+TITLE: O'Rourke & Hilley 2025 - covariate, free b, Wald;
+
 DATA:	FILE IS CIELCS_free.dat;
   VARIABLE:	NAMES ARE z x1 m2-m6 y2-y6;
      USEVARIABLE ARE z x1 m2-m6 y2-y6 xz;
@@ -38,14 +38,14 @@ MODEL:
   dy5 on ly4 * (pcy);
   dy6 on ly5 * (pcy);
 
-!Intercept
-  y0 by ly2 @1;
+!Initial level
+    y0 by ly2 @1;
 
-!Slope: Model relationship between slope and LCSs
-  sy by dy3 @1;
-  sy by dy4 @1;
-  sy by dy5 @1;
-  sy by dy6 @1;
+!Additive component
+    ya by dy3 @1;
+    ya by dy4 @1;
+    ya by dy5 @1;
+    ya by dy6 @1;
 
 ! Set the means and variance of observed, latent, and LCSs to be 0
   [y2@0]; [ly2@0];  ly2@0;
@@ -54,11 +54,12 @@ MODEL:
   [y5@0]; [ly5@0]; [dy5@0]; ly5@0; dy5@0;
   [y6@0]; [ly6@0]; [dy6@0]; ly6@0; dy6@0;
 
-!Intercept & slope means & variances
-  [y0* sy*];
-  y0 sy;
+!Initial level & additive component means & variances
+    [y0* ya*];
+    y0 ya;
 
 !for the longitudinal variable M
+
 !Latent variable nodes
   lm2 by m2 @1;
   lm3 by m3 @1;
@@ -84,14 +85,14 @@ MODEL:
   dm5 on lm4 * (pcm);
   dm6 on lm5 * (pcm);
 
-!Intercept
-  m0 by lm2 @1;
+!Initial level
+    m0 by lm2 @1;
 
-!Slope: Model relationship between slope and LCSs
-  sm by dm3 @1;
-  sm by dm4 @1;
-  sm by dm5 @1;
-  sm by dm6 @1;
+!Additive component
+    ma by dm3 @1;
+    ma by dm4 @1;
+    ma by dm5 @1;
+    ma by dm6 @1;
 
 ! Set the means and variance of observed, latent, and LCSs to be 0
   [m2@0]; [lm2@0];  lm2@0;
@@ -100,21 +101,21 @@ MODEL:
   [m5@0]; [lm5@0]; [dm5@0]; lm5@0; dm5@0;
   [m6@0]; [lm6@0]; [dm6@0]; lm6@0; dm6@0;
 
-!Intercept & slope means & variances
-  [m0* sm*];
-  m0 sm;
+!Initial level & additive component means & variances
+    [m0* ma*];
+    m0 ma;
 
-!X on slope Y (c');
-  sy on x1 (cp);
+  !X on additive component for Y (c')
+    ya on x1 (cp);
 
-  !X on slope M (a);
-  sm on x1 (a_x);
+  !X on additive component for M (a_x);
+    ma on x1 (a_x);
 
-  !Z on M diff scores (za);
-  sm on z (a_z);
+  !Z on additive component for M (a_z);
+    ma on z (a_z);
 
-  !Interaction (int);
-  sm on xz (a_xz);
+  !Interaction (a_xz);
+    ma on xz (a_xz);
 
   !coupling from m to y (b);
   dy3 on lm2*-.23 (b3);
@@ -136,23 +137,24 @@ MODEL:
   y5 with m5* (7);
   y6 with m6* (7);
 
-  !X & Z on M & Y intercept;
+  !X & Z on M & Y initial level
   y0 ON x1;
   m0 ON x1;
   y0 ON z;
   m0 ON z;
 
-! Interaction on M & Y intercept;
+! Interaction on M & Y initial level;
   y0 on xz;
   m0 on xz;
 
+
   !Parameter covs;
-  y0 WITH sy;
-  m0 WITH sm;
-  m0 WITH y0;
-  sm WITH sy;
-  m0 WITH sy;
-  y0 WITH sm;
+    y0 WITH ya;
+    m0 WITH ma;
+    m0 WITH y0;
+    ma WITH ya;
+    m0 WITH ya;
+    y0 WITH ma;
 
   !Indirect effect ab;
   Model Constraint:
@@ -173,4 +175,3 @@ MODEL:
     ab0_6 = ab1_6;
 
 OUTPUT:  TECH1 TECH4;
-!cint(bootstrap);
